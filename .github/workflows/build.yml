@@ -82,7 +82,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/chappio/git-backup
+          images: ghcr.io/timoxd7/git-backup
           tags: |
             type=ref,event=pr
             type=semver,pattern={{version}}
