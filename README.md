@@ -2,9 +2,11 @@
 
 A cli to pull all your git repositories for backup purposes. It is completely stand-alone. You don't even need to install git.
 
+>NOTE: This is only a fork with some minor improvements. See [the original repo](https://github.com/ChappIO/git-backup) for updates. Changes from original can be found [here](https://github.com/ChappIO/git-backup/compare/main...timoxd7:git-backup:main).
+
 ## Download
 
-The latest version can be downloaded from the [releases page](https://github.com/ChappIO/git-backup/releases).
+The latest version can be downloaded from the [releases page](https://github.com/timoxd7/git-backup/releases).
 
 ## Configuration File
 
@@ -105,7 +107,7 @@ First, create your [git-backup.yml file](#configuration-file) at `/path/to/your/
 Then update your backups using the mounted volume.
 
 ```bash
-docker run -v /path/to/backups:/backups ghcr.io/chappio/git-backup:1
+docker run -v /path/to/backups:/backups ghcr.io/timoxd7/git-backup:edge
 ```
 
 ### Parameters
