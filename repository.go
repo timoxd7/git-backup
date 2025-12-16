@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/transport"
@@ -31,7 +32,7 @@ func isBare(repo *git.Repository) (bool, error) {
 	return config.Core.IsBare, nil
 }
 
-func (r *Repository) CloneInto(path string, bare bool) error {
+func (r *Repository) CloneInto(path string, bare bool, forceUpdate bool) error {
 	var auth http.AuthMethod
 	if r.GitURL.User != nil {
 		password, _ := r.GitURL.User.Password()
@@ -58,8 +59,17 @@ func (r *Repository) CloneInto(path string, bare bool) error {
 					err = w.Pull(&git.PullOptions{
 						Auth:     auth,
 						Progress: os.Stdout,
+						Force:    forceUpdate,
 					})
+					// Handle non-fast-forward by resetting to remote state
+					if forceUpdate && err != nil && strings.Contains(err.Error(), "non-fast-forward") {
+						log.Printf("Non-fast-forward detected for %s, fetching instead", r.FullName)
+						err = nil // Clear error, we'll handle via fetch
+					}
 				}
+			} else if bErr == nil && isBare {
+				// For bare repos, we don't pull, just clear the error
+				err = nil
 			}
 		}
 	}

@@ -16,6 +16,7 @@ var configFilePath = flag.String("config.file", "git-backup.yml", "The path to y
 var targetPath = flag.String("backup.path", "backup", "The target path to the backup folder.")
 var failAtEnd = flag.Bool("backup.fail-at-end", false, "Fail at the end of backing up repositories, rather than right away.")
 var bareClone = flag.Bool("backup.bare-clone", false, "Make bare clones without checking out the main branch.")
+var forceUpdate = flag.Bool("backup.force-update", false, "Force update repositories even when non-fast-forward changes are detected.")
 var printVersion = flag.Bool("version", false, "Show the version number and exit.")
 var enableInsecure = flag.Bool("insecure", false, "Use this flag to disable verification of SSL/TLS certificates")
 
@@ -66,7 +67,7 @@ func main() {
 				log.Printf("Failed to create directory: %s", err)
 				os.Exit(100)
 			}
-			err = repo.CloneInto(targetPath, *bareClone)
+			err = repo.CloneInto(targetPath, *bareClone, *forceUpdate)
 			if err != nil {
 				errors++
 				log.Printf("Failed to clone: %s", err)
